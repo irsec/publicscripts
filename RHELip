@@ -1,0 +1,18 @@
+#!/bin/bash
+
+iptables -F
+
+iptabels -A INPUT -p icmp --icmp-type 8 -s 0/0 -j ACCEPT
+iptables -A OUTPUT -p icmp --icmp-type 0 -s 0/0 -j ACCEPT 							#pings
+iptables -A INPUT -p tcp -m multiport --dport 25,143,220,587,445,53,88 -j ACCEPT 	#services
+iptables -A OUTPUT -p tcp -m multiport --dport 25,143,220,587,445,53,88 -j ACCEPT
+iptables -A INPUT -p udp -m multiport --dports 445,53,88,389 -j ACCEPT				#ad auth
+iptables -A INPUT -p udp -m multiport --dports 445,53,88,389 -j ACCPET
+iptables -A INPUT -s 127.0.0.0/8 -j ACCEPT 											#loopback
+iptables -A OUTPUT -d 127.0.0.0/8 -j ACCEPT
+
+for i in INPUT OUTPUT FORWARD
+do
+	iptables -A $i -j DROP
+done
+
