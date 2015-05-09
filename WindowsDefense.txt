@@ -1,0 +1,78 @@
+#change password
+net user administrator *
+
+Flicker NIC/Disconnect
+Windows Key-R
+ncpa.cpl
+RIght click on adapter, renable
+right click properties, uncheck file and print sharing
+
+Windows Key-R
+sysdm.cpl 
+Remote Tab, 
+
+net user guest /active:no
+net user redteamhax /delete
+net (local)group Administrators (list)
+net (local)group Administrators guest /delete 
+
+#audit processes
+Windows Key-R 
+taskmgr
+kill notepad
+kill exes with bunch of random numbers and letters
+
+netstat -ano
+make sure no established to red team range 
+
+#batch script
+@echo off
+:g
+netstat -ano | findstr STAB | findstr /V 127.0
+ping -n <sec+1> 127.0.0.1 > NUL 
+cls
+goto g 
+
+#audit LIstening THings, kill unecessary processes 
+netstat -ano | findstr LIST 
+
+WIndows Key -R 
+services.msc
+shut off unused services 
+
+Firewall
+WIndows Key -R -> wf.mscblock all inbound and outbound 
+don't use internet explorer
+
+#delete scheduled tasks
+schtasks /delte /tn *
+cacls \Windows\Temp /T/P Everyone:N 
+
+HKLM\SOFTWARE\Microsoft\WIndows\CurrentVersion\Run(ONce)
+
+#Defend against ZOne transfers
+Get-DNSSErverZOne | Set-DNSServerPrimaryZOne - SecureSecondaries TransferToZoneNameServer OR NoTransfer
+#Take off firewall off TCP port 53
+#disable against zone updates
+Get-DNSServerZone | Set-DNSServerPrimaryZOne - DynamicUpdate None 
+Get-DNSServerZone |Set-DNSServerRecursion - Enable:$false 
+
+#incident responses (IP ddresses, summary of event, mediation techniques)
+Who are you addressing
+Dates, times (timeframes)
+Type of incident - brief overview
+Priority level - Low, Medium, High
+Scope, affected systems, users
+COntainment process
+Incident summary 
+
+ProtectFTP WIndows 2008
+1. Disable anonymous access
+2. Enable Logging
+3. Harden ACL (Read, Write, Execute)
+4. FTP as blind put
+5. Enable Disk Quotas
+6. Restrict Access by IP
+Audit Logon Events
+Enable Strong Password REquirement
+Enable Account Lockout and Account Lockout Threshold 
